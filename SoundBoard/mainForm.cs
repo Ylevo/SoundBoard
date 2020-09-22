@@ -197,8 +197,6 @@ namespace SoundBoard
                             case DialogResult.Yes:
                                 SaveToXml();
                                 break;
-                            case DialogResult.No:
-                                break;
                         }
                     }
                 }
@@ -882,6 +880,25 @@ namespace SoundBoard
             {
                 DataGridHkRemove(sender, e);
             }
+        }
+
+        private void newFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
+            {
+                DialogResult answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (answer)
+                {
+                    case DialogResult.Yes:
+                        SaveToXml();
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                }
+            }
+            ResetHotkeysAndOptions();
+            InitDirtyTracker();
+            currentXmlFilePath = "";
         }
     }
 }
