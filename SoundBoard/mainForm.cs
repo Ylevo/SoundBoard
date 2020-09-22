@@ -897,7 +897,7 @@ namespace SoundBoard
             }
             ResetHotkeysAndOptions();
             InitDirtyTracker();
-            currentXmlFilePath = "prout";
+            currentXmlFilePath = "";
         }
     }
 }
