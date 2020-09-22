@@ -915,6 +915,7 @@ namespace SoundBoard
             {
                 DataGridHkRemove(sender, e);
             }
+            string prout;
         }
 
         
