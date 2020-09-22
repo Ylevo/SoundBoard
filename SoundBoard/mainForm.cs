@@ -187,8 +187,7 @@ namespace SoundBoard
                 {
                     if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
                     {
-                        DialogResult answer;
-                        answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        DialogResult answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                         switch (answer)
                         {
                             case DialogResult.Cancel:
