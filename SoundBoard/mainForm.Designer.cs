@@ -56,12 +56,14 @@
             this.audioHkAudioDeviceLbl = new System.Windows.Forms.Label();
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.fileMenuItem = new System.Windows.Forms.MenuItem();
+            this.newFileSubMenuItem = new System.Windows.Forms.MenuItem();
+            this.loadFileSubMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.saveFileSubMenuItem = new System.Windows.Forms.MenuItem();
             this.saveAsFileSubMenuItem = new System.Windows.Forms.MenuItem();
-            this.alwaysSaveOnClosingFileSubMenuItem = new System.Windows.Forms.MenuItem();
             this.exportAsZipFileSubMenuItem = new System.Windows.Forms.MenuItem();
+            this.alwaysSaveOnClosingFileSubMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.loadFileSubMenuItem = new System.Windows.Forms.MenuItem();
             this.exitFileSubMenuItem = new System.Windows.Forms.MenuItem();
             this.optionsMenuItem = new System.Windows.Forms.MenuItem();
             this.helpMenuItem = new System.Windows.Forms.MenuItem();
@@ -124,8 +126,6 @@
             this.controlHkKeyToPressLbl = new System.Windows.Forms.Label();
             this.controlHkKeyTxtBox = new System.Windows.Forms.TextBox();
             this.controlHkRoleCmbBox = new System.Windows.Forms.ComboBox();
-            this.newFileSubMenuItem = new System.Windows.Forms.MenuItem();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.audioHkDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioHkVolumeBar)).BeginInit();
             this.mainTabCtrl.SuspendLayout();
@@ -429,6 +429,23 @@
             this.exitFileSubMenuItem});
             this.fileMenuItem.Text = "File";
             // 
+            // newFileSubMenuItem
+            // 
+            this.newFileSubMenuItem.Index = 0;
+            this.newFileSubMenuItem.Text = "New";
+            this.newFileSubMenuItem.Click += new System.EventHandler(this.NewFileSubMenuItem_Click);
+            // 
+            // loadFileSubMenuItem
+            // 
+            this.loadFileSubMenuItem.Index = 1;
+            this.loadFileSubMenuItem.Text = "Load...";
+            this.loadFileSubMenuItem.Click += new System.EventHandler(this.LoadFileSubMenuItem_Click);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 2;
+            this.menuItem1.Text = "-";
+            // 
             // saveFileSubMenuItem
             // 
             this.saveFileSubMenuItem.Index = 3;
@@ -439,13 +456,7 @@
             // 
             this.saveAsFileSubMenuItem.Index = 4;
             this.saveAsFileSubMenuItem.Text = "Save as...";
-            this.saveAsFileSubMenuItem.Click += new System.EventHandler(this.SaveAsFile);
-            // 
-            // alwaysSaveOnClosingFileSubMenuItem
-            // 
-            this.alwaysSaveOnClosingFileSubMenuItem.Index = 6;
-            this.alwaysSaveOnClosingFileSubMenuItem.Text = "Always save on closing";
-            this.alwaysSaveOnClosingFileSubMenuItem.Click += new System.EventHandler(this.AlwaysSaveOnClosingFileSubMenuItem_Click);
+            this.saveAsFileSubMenuItem.Click += new System.EventHandler(this.SaveAsXmlEvent);
             // 
             // exportAsZipFileSubMenuItem
             // 
@@ -453,16 +464,16 @@
             this.exportAsZipFileSubMenuItem.Text = "Export as zip...";
             this.exportAsZipFileSubMenuItem.Click += new System.EventHandler(this.ExportAsZipFileSubMenuItem_Click);
             // 
+            // alwaysSaveOnClosingFileSubMenuItem
+            // 
+            this.alwaysSaveOnClosingFileSubMenuItem.Index = 6;
+            this.alwaysSaveOnClosingFileSubMenuItem.Text = "Always save on closing";
+            this.alwaysSaveOnClosingFileSubMenuItem.Click += new System.EventHandler(this.AlwaysSaveOnClosingFileSubMenuItem_Click);
+            // 
             // menuItem2
             // 
             this.menuItem2.Index = 7;
             this.menuItem2.Text = "-";
-            // 
-            // loadFileSubMenuItem
-            // 
-            this.loadFileSubMenuItem.Index = 1;
-            this.loadFileSubMenuItem.Text = "Load...";
-            this.loadFileSubMenuItem.Click += new System.EventHandler(this.LoadFileSubMenuItem_Click);
             // 
             // exitFileSubMenuItem
             // 
@@ -1258,17 +1269,6 @@
             this.controlHkRoleCmbBox.TabIndex = 41;
             this.controlHkRoleCmbBox.SelectionChangeCommitted += new System.EventHandler(this.ControlHkRoleCmbBox_SelectionChangeCommitted);
             // 
-            // newFileSubMenuItem
-            // 
-            this.newFileSubMenuItem.Index = 0;
-            this.newFileSubMenuItem.Text = "New";
-            this.newFileSubMenuItem.Click += new System.EventHandler(this.newFileSubMenuItem_Click);
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 2;
-            this.menuItem1.Text = "-";
-            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1281,6 +1281,7 @@
             this.Name = "mainForm";
             this.Text = "SoundBoard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Click += new System.EventHandler(this.SaveAsXmlEvent);
             ((System.ComponentModel.ISupportInitialize)(this.audioHkDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioHkVolumeBar)).EndInit();
             this.mainTabCtrl.ResumeLayout(false);

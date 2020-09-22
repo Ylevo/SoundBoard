@@ -154,18 +154,20 @@ namespace SoundBoard
             }
         }
 
-        private void SaveToXml(bool relativePaths = false)
+        private bool SaveToXml(bool relativePaths = false)
         {
+            bool saved = false;
             try
             {
                 if (currentXmlFilePath == "")
                 {
-                    SaveAsFile(new object(), new EventArgs());
+                    saved = SaveAsXml();
                 }
                 else 
                 {
                     xmlLogic.SaveHotkeysToXml(currentXmlFilePath, relativePaths);
                     InitDirtyTracker();
+                    saved = true;
                 }
             }
             catch (Exception ex)
@@ -173,6 +175,7 @@ namespace SoundBoard
                 MessageBox.Show(string.Format(ErrorHelper.XmlSave.UnexpectedErrorException, Logger.LogsFolderPath), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Logger.NewLog(ex, "Unexpected exception during xml saving.");
             }
+            return saved;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -533,6 +536,28 @@ namespace SoundBoard
             }
         }
 
+        private void NewFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
+            {
+                DialogResult answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                switch (answer)
+                {
+                    case DialogResult.Yes:
+                        if (!SaveToXml())
+                        {
+                            return;
+                        }
+                        break;
+                    case DialogResult.Cancel:
+                        return;
+                }
+            }
+            ResetHotkeysAndOptions();
+            InitDirtyTracker();
+            currentXmlFilePath = "";
+        }
+
         private void AlwaysSaveOnClosingFileSubMenuItem_Click(object sender, EventArgs e)
         {
             ((MenuItem)sender).Checked = !((MenuItem)sender).Checked;
@@ -544,8 +569,14 @@ namespace SoundBoard
             SaveToXml();
         }
 
-        private void SaveAsFile(object sender, EventArgs e)
+        private void SaveAsXmlEvent(object sender, EventArgs e)
         {
+            SaveAsXml();
+        }
+
+        private bool SaveAsXml()
+        {
+            bool saved = true;
             SaveFileDialog saveXmlDialog = new SaveFileDialog();
             saveXmlDialog.AddExtension = true;
             saveXmlDialog.DefaultExt = ".xml";
@@ -557,6 +588,11 @@ namespace SoundBoard
                 currentXmlFilePath = saveXmlDialog.FileName;
                 SaveToXml();
             }
+            else
+            {
+                saved = false;
+            }
+            return saved;
         }
 
         private void ExportAsZipFileSubMenuItem_Click(object sender, EventArgs e)
@@ -881,23 +917,6 @@ namespace SoundBoard
             }
         }
 
-        private void newFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
-            {
-                DialogResult answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                switch (answer)
-                {
-                    case DialogResult.Yes:
-                        SaveToXml();
-                        break;
-                    case DialogResult.Cancel:
-                        return;
-                }
-            }
-            ResetHotkeysAndOptions();
-            InitDirtyTracker();
-            currentXmlFilePath = "";
-        }
+        
     }
 }
