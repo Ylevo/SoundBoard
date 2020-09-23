@@ -456,7 +456,7 @@
             // 
             this.saveAsFileSubMenuItem.Index = 4;
             this.saveAsFileSubMenuItem.Text = "Save as...";
-            this.saveAsFileSubMenuItem.Click += new System.EventHandler(this.SaveAsXmlEvent);
+            this.saveAsFileSubMenuItem.Click += new System.EventHandler(this.SaveAsFileSubMenuItem_Click);
             // 
             // exportAsZipFileSubMenuItem
             // 
@@ -1281,7 +1281,7 @@
             this.Name = "mainForm";
             this.Text = "SoundBoard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Click += new System.EventHandler(this.SaveAsXmlEvent);
+            this.Click += new System.EventHandler(this.SaveAsFileSubMenuItem_Click);
             ((System.ComponentModel.ISupportInitialize)(this.audioHkDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioHkVolumeBar)).EndInit();
             this.mainTabCtrl.ResumeLayout(false);

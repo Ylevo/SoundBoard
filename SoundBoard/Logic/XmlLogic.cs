@@ -46,7 +46,6 @@ namespace SoundBoard.Logic
                     errorsList.Add("The audio hotkeys could not be retrieved : the audio files' folder was not found.");
                 }
             }
-            short test = keysTranslater.GetCurrentKeyboardLayoutIdentifier();
             if (originalLayoutIdentifier != keysTranslater.GetCurrentKeyboardLayoutIdentifier())
             {
                 reMapping = true;

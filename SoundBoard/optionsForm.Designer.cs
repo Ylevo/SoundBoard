@@ -112,9 +112,9 @@
             this.disableDirtyTrackerChkBox.AutoSize = true;
             this.disableDirtyTrackerChkBox.Location = new System.Drawing.Point(12, 83);
             this.disableDirtyTrackerChkBox.Name = "disableDirtyTrackerChkBox";
-            this.disableDirtyTrackerChkBox.Size = new System.Drawing.Size(184, 17);
+            this.disableDirtyTrackerChkBox.Size = new System.Drawing.Size(233, 17);
             this.disableDirtyTrackerChkBox.TabIndex = 6;
-            this.disableDirtyTrackerChkBox.Text = "Never ask me to save on closing.";
+            this.disableDirtyTrackerChkBox.Text = "Never ask me to save on closing or loading.";
             this.disableDirtyTrackerChkBox.UseVisualStyleBackColor = true;
             // 
             // resetRatesOnNewPlayChkBox

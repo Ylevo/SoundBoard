@@ -23,6 +23,7 @@ namespace SoundBoard
         private string dataGridCellValueTemp;
         private string currentXmlFilePath = "";
         private bool volumeTest = false;
+        private bool xmlLoadedImproperly = false;
         private DirtyTracker dirtyTracker;
         private Dictionary<string, ControlRoles> friendlyActionsNames;
         private KeyEventHandler dataGridKeyEdit = null;
@@ -127,6 +128,137 @@ namespace SoundBoard
             TopMost = false;
         }
 
+        private void NewFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult answer = AskForSaving();
+            if ((answer == DialogResult.Yes && SaveToXml()) || answer == DialogResult.No || answer == DialogResult.None)
+            {
+                ResetHotkeysAndOptions();
+                InitDirtyTracker();
+                currentXmlFilePath = "";
+            }
+        }
+
+        private void AlwaysSaveOnClosingFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            ((MenuItem)sender).Checked = !((MenuItem)sender).Checked;
+            AppDataManager.setCfgParameter(AppDataNames.SaveOnClosing, ((MenuItem)sender).Checked ? "1" : "0");
+        }
+
+        private void ExportAsZipFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog exportZipDialog = new SaveFileDialog();
+            exportZipDialog.AddExtension = true;
+            exportZipDialog.DefaultExt = ".zip";
+            exportZipDialog.Filter = "ZIP|*.zip";
+            exportZipDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            exportZipDialog.RestoreDirectory = true;
+            if (exportZipDialog.ShowDialog() == DialogResult.OK)
+            {
+                string zipFilePath = exportZipDialog.FileName;
+                string folderToZip = Path.Combine(Path.GetDirectoryName(zipFilePath), "tmpSoundBoardZipping");
+                currentXmlFilePath = Path.Combine(folderToZip, "Hotkeys.xml");
+                try
+                {
+                    xmlLogic.ExportHotkeysAsZip(zipFilePath, folderToZip);
+                }
+                catch (Exception ex)
+                {
+                    Logger.NewLog(ex, "Zip export failed.");
+                    MessageBox.Show(string.Format(ErrorHelper.UnexpectedErrorExportZip, Logger.LogsFolderPath), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    Directory.Delete(folderToZip, true);
+                }
+            }
+        }
+
+        private void LoadFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult answer = AskForSaving();
+            if ((answer == DialogResult.Yes && SaveToXml()) || answer == DialogResult.No || answer == DialogResult.None)
+            {
+                OpenFileDialog openXml = new OpenFileDialog();
+                openXml.Filter = "XML|*.xml";
+                openXml.Multiselect = false;
+                if (openXml.ShowDialog() == DialogResult.OK)
+                {
+                    ResetHotkeysAndOptions();
+                    LoadXml(openXml.FileName);
+                }
+            }
+        }
+
+        private void ExitFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void OptionsMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var optForm = new optionsForm(this))
+            {
+                optForm.ShowDialog();
+            }
+        }
+
+        private void SaveFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveToXml();
+        }
+
+        private void SaveAsFileSubMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveAsNewXml();
+        }
+
+        private bool SaveAsNewXml()
+        {
+            bool saved;
+            SaveFileDialog saveXmlDialog = new SaveFileDialog();
+            saveXmlDialog.AddExtension = true;
+            saveXmlDialog.DefaultExt = ".xml";
+            saveXmlDialog.Filter = "XML|*.xml";
+            saveXmlDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveXmlDialog.FileName = "Hotkeys.xml";
+            if (saveXmlDialog.ShowDialog() == DialogResult.OK)
+            {
+                currentXmlFilePath = saveXmlDialog.FileName;
+                saved = SaveToXml(fromSaveAsNewXmlOption:true);
+            }
+            else
+            {
+                saved = false;
+            }
+            return saved;
+        }
+
+        private bool SaveToXml(bool relativePaths = false, bool fromSaveAsNewXmlOption = false)
+        {
+            bool saved = false;
+            if (xmlLoadedImproperly && !fromSaveAsNewXmlOption)
+            {
+                DialogResult answer = MessageBox.Show("There were errors during the last loading of the current hotkeys.\nDo you still want to save?", "Save", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (answer == DialogResult.No)
+                {
+                    return saved;
+                }
+            }
+            if (currentXmlFilePath == "")
+            {
+                saved = SaveAsNewXml();
+            }
+            else
+            {
+                xmlLogic.SaveHotkeysToXml(currentXmlFilePath, relativePaths);
+                InitDirtyTracker();
+                saved = true;
+                xmlLoadedImproperly = false;
+            }
+            return saved;
+        }
+
         private void LoadXml(string xmlFilePath)
         {
             List<string> errorsList;
@@ -137,6 +269,11 @@ namespace SoundBoard
                 if (errorsList.Count > 0)
                 {
                     MessageBox.Show(String.Join("\n", errorsList.ToArray()), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    xmlLoadedImproperly = true;
+                }
+                else
+                {
+                    xmlLoadedImproperly = false;
                 }
             }
             catch (CustomException ex)
@@ -154,30 +291,6 @@ namespace SoundBoard
             }
         }
 
-        private bool SaveToXml(bool relativePaths = false)
-        {
-            bool saved = false;
-            try
-            {
-                if (currentXmlFilePath == "")
-                {
-                    saved = SaveAsXml();
-                }
-                else 
-                {
-                    xmlLogic.SaveHotkeysToXml(currentXmlFilePath, relativePaths);
-                    InitDirtyTracker();
-                    saved = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format(ErrorHelper.XmlSave.UnexpectedErrorException, Logger.LogsFolderPath), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logger.NewLog(ex, "Unexpected exception during xml saving.");
-            }
-            return saved;
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
@@ -188,19 +301,17 @@ namespace SoundBoard
                 }
                 else 
                 {
-                    if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
+                    DialogResult answer = AskForSaving();
+                    switch (answer)
                     {
-                        DialogResult answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                        switch (answer)
-                        {
-                            case DialogResult.Cancel:
-                                e.Cancel = true;
-                                break;
-                            case DialogResult.Yes:
-                                SaveToXml();
-                                break;
-                        }
+                        case DialogResult.Cancel:
+                            e.Cancel = true;
+                            break;
+                        case DialogResult.Yes:
+                            SaveToXml();
+                            break;
                     }
+                    
                 }
                 if (!e.Cancel)
                 {
@@ -214,6 +325,16 @@ namespace SoundBoard
                 Logger.NewLog(ex, "Exception when closing the form");
                 e.Cancel = false;
             }
+        }
+
+        private DialogResult AskForSaving()
+        {
+            DialogResult answer = DialogResult.None;
+            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
+            {
+                answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            }
+            return answer;
         }
 
         private void AudioHkBrowseBtn_Click(object sender, EventArgs e)
@@ -536,119 +657,7 @@ namespace SoundBoard
             }
         }
 
-        private void NewFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
-            {
-                DialogResult answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                switch (answer)
-                {
-                    case DialogResult.Yes:
-                        if (!SaveToXml())
-                        {
-                            return;
-                        }
-                        break;
-                    case DialogResult.Cancel:
-                        return;
-                }
-            }
-            ResetHotkeysAndOptions();
-            InitDirtyTracker();
-            currentXmlFilePath = "";
-        }
-
-        private void AlwaysSaveOnClosingFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            ((MenuItem)sender).Checked = !((MenuItem)sender).Checked;
-            AppDataManager.setCfgParameter(AppDataNames.SaveOnClosing, ((MenuItem)sender).Checked ? "1" : "0");
-        }
-
-        private void SaveFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveToXml();
-        }
-
-        private void SaveAsXmlEvent(object sender, EventArgs e)
-        {
-            SaveAsXml();
-        }
-
-        private bool SaveAsXml()
-        {
-            bool saved = true;
-            SaveFileDialog saveXmlDialog = new SaveFileDialog();
-            saveXmlDialog.AddExtension = true;
-            saveXmlDialog.DefaultExt = ".xml";
-            saveXmlDialog.Filter = "XML|*.xml";
-            saveXmlDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saveXmlDialog.FileName = "Hotkeys.xml";
-            if (saveXmlDialog.ShowDialog() == DialogResult.OK)
-            {
-                currentXmlFilePath = saveXmlDialog.FileName;
-                SaveToXml();
-            }
-            else
-            {
-                saved = false;
-            }
-            return saved;
-        }
-
-        private void ExportAsZipFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog exportZipDialog = new SaveFileDialog();
-            exportZipDialog.AddExtension = true;
-            exportZipDialog.DefaultExt = ".zip";
-            exportZipDialog.Filter = "ZIP|*.zip";
-            exportZipDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            exportZipDialog.RestoreDirectory = true;
-            if (exportZipDialog.ShowDialog() == DialogResult.OK)
-            {
-                string zipFilePath = exportZipDialog.FileName;
-                string folderToZip = Path.Combine(Path.GetDirectoryName(zipFilePath), "tmpSoundBoardZipping");
-                currentXmlFilePath = Path.Combine(folderToZip, "Hotkeys.xml");
-                try
-                {
-                    xmlLogic.ExportHotkeysAsZip(zipFilePath, folderToZip);
-                }
-                catch (Exception ex)
-                {
-                    Logger.NewLog(ex, "Zip export failed.");
-                    MessageBox.Show(string.Format(ErrorHelper.UnexpectedErrorExportZip, Logger.LogsFolderPath), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    Directory.Delete(folderToZip, true);
-                }
-            }
-        }
-
-        private void LoadFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openXml = new OpenFileDialog();
-            openXml.Filter = "XML|*.xml";
-            openXml.Multiselect = false;
-            if (openXml.ShowDialog() == DialogResult.OK)
-            {
-                ResetHotkeysAndOptions();
-                LoadXml(openXml.FileName);
-            }
-        }
-
-        private void ExitFileSubMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void OptionsMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var optForm = new optionsForm(this))
-            {
-                optForm.ShowDialog();
-            }
-        }
-
+        
         private void ControlHkAddHkBtn_Click(object sender, EventArgs e)
         {
             string key = "", friendlyActionName = "", displayedValue = "", keyToPress = "";
@@ -916,9 +925,6 @@ namespace SoundBoard
                 DataGridHkRemove(sender, e);
             }
         }
-
-        private void blabla() { }
-
         
     }
 }
