@@ -16,7 +16,7 @@ using SoundBoard.Logic;
 namespace SoundBoard
 {
 
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
         private HotkeyLogic hkLogic;
         private XmlLogic xmlLogic;
@@ -30,7 +30,7 @@ namespace SoundBoard
         private KeyPressEventHandler dataGridKeyPressEdit = null;
         private KeysTranslater keysTranslater;
 
-        public mainForm(bool isFirstInstance)
+        public MainForm(bool isFirstInstance)
         {
             Init(isFirstInstance);
         }
@@ -53,14 +53,16 @@ namespace SoundBoard
             }
             catch (FormatException) { }
             if (audioHkDevicesCmbBox.SelectedValue == null) { audioHkDevicesCmbBox.SelectedValue = devices.FirstOrDefault().Guid; }
-            DataGridViewComboBoxColumn audioDeviceCln = new DataGridViewComboBoxColumn();
-            audioDeviceCln.Name = "audioDeviceCln";
-            audioDeviceCln.DataPropertyName = "Guid";
-            audioDeviceCln.HeaderText = "Audio Output";
-            audioDeviceCln.Width = 220;
-            audioDeviceCln.DataSource = devices.ToList();
-            audioDeviceCln.ValueMember = "Guid";
-            audioDeviceCln.DisplayMember = "Description";
+            DataGridViewComboBoxColumn audioDeviceCln = new DataGridViewComboBoxColumn
+            {
+                Name = "audioDeviceCln",
+                DataPropertyName = "Guid",
+                HeaderText = "Audio Output",
+                Width = 220,
+                DataSource = devices.ToList(),
+                ValueMember = "Guid",
+                DisplayMember = "Description"
+            };
             audioHkDataGrid.Columns.Add(audioDeviceCln);
             audioHkStartAtTimePicker.Format = DateTimePickerFormat.Custom;
             audioHkStartAtTimePicker.CustomFormat = "mm:ss";
@@ -147,12 +149,14 @@ namespace SoundBoard
 
         private void ExportAsZipFileSubMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog exportZipDialog = new SaveFileDialog();
-            exportZipDialog.AddExtension = true;
-            exportZipDialog.DefaultExt = ".zip";
-            exportZipDialog.Filter = "ZIP|*.zip";
-            exportZipDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            exportZipDialog.RestoreDirectory = true;
+            SaveFileDialog exportZipDialog = new SaveFileDialog
+            {
+                AddExtension = true,
+                DefaultExt = ".zip",
+                Filter = "ZIP|*.zip",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                RestoreDirectory = true
+            };
             if (exportZipDialog.ShowDialog() == DialogResult.OK)
             {
                 string zipFilePath = exportZipDialog.FileName;
@@ -179,9 +183,11 @@ namespace SoundBoard
             DialogResult answer = AskForSaving();
             if ((answer == DialogResult.Yes && SaveToXml()) || answer == DialogResult.No || answer == DialogResult.None)
             {
-                OpenFileDialog openXml = new OpenFileDialog();
-                openXml.Filter = "XML|*.xml";
-                openXml.Multiselect = false;
+                OpenFileDialog openXml = new OpenFileDialog
+                {
+                    Filter = "XML|*.xml",
+                    Multiselect = false
+                };
                 if (openXml.ShowDialog() == DialogResult.OK)
                 {
                     ResetHotkeysAndOptions();
@@ -216,12 +222,14 @@ namespace SoundBoard
         private bool SaveAsNewXml()
         {
             bool saved;
-            SaveFileDialog saveXmlDialog = new SaveFileDialog();
-            saveXmlDialog.AddExtension = true;
-            saveXmlDialog.DefaultExt = ".xml";
-            saveXmlDialog.Filter = "XML|*.xml";
-            saveXmlDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saveXmlDialog.FileName = "Hotkeys.xml";
+            SaveFileDialog saveXmlDialog = new SaveFileDialog
+            {
+                AddExtension = true,
+                DefaultExt = ".xml",
+                Filter = "XML|*.xml",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                FileName = "Hotkeys.xml"
+            };
             if (saveXmlDialog.ShowDialog() == DialogResult.OK)
             {
                 currentXmlFilePath = saveXmlDialog.FileName;
@@ -660,7 +668,7 @@ namespace SoundBoard
         
         private void ControlHkAddHkBtn_Click(object sender, EventArgs e)
         {
-            string key = "", friendlyActionName = "", displayedValue = "", keyToPress = "";
+            string key, friendlyActionName, displayedValue, keyToPress= "";
             float flowChangeValue = 0;
             int hotkeyId;
             ControlRoles role;
@@ -865,8 +873,7 @@ namespace SoundBoard
 
         public void UpdateTracksOrder(string value)
         {
-            TracksOrders order;
-            SoundPlayer.Instance.TracksPlayOrder = Enum.TryParse(value, out order) ? order : TracksOrders.Default;
+            SoundPlayer.Instance.TracksPlayOrder = Enum.TryParse(value, out TracksOrders order) ? order : TracksOrders.Default;
         }  
 
         public void UpdateResetMusicRates(bool value)

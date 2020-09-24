@@ -17,7 +17,7 @@ namespace SoundBoard
             InitializeComponent();
         }
 
-        private void naudioLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void NaudioLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             naudioLinkLabel.LinkVisited = true;
             System.Diagnostics.Process.Start("https://naudio.codeplex.com/license");

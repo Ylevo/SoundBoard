@@ -17,10 +17,10 @@ namespace SoundBoard.Logic
     class XmlLogic
     {
         private KeysTranslater keysTranslater;
-        private mainForm mainFrm;
+        private MainForm mainFrm;
         private HotkeyLogic hkLogic;
 
-        public XmlLogic(mainForm mainFrm, HotkeyLogic hkLogic)
+        public XmlLogic(MainForm mainFrm, HotkeyLogic hkLogic)
         {
             this.mainFrm = mainFrm.ThrowIfNull(nameof(mainFrm), "A form is required to attach the hotkeys to.");
             this.hkLogic = hkLogic.ThrowIfNull(nameof(hkLogic), "HotkeyLogic required to work.");

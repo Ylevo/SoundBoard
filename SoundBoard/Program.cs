@@ -33,11 +33,11 @@ namespace SoundBoard
             }
             if (IsFirstInstance())
             {
-                Application.Run(new mainForm(true));
+                Application.Run(new MainForm(true));
             }
             else
             {
-                Application.Run(new mainForm(false));
+                Application.Run(new MainForm(false));
             }
         }
 

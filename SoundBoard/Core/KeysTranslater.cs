@@ -67,12 +67,7 @@ namespace SoundBoard.Core
                                                          { "NumPad9", "105", "9(NUMPAD)"},
                                                          { "\n", "13", "ENTER"},
                                                       };
-        private const int KEYEVENTF_KEYUP = 0x0002;
-        private const int KEYEVENTF_SCANCODE = 0x0008;
-        private const int INPUT_KEYBOARD = 1;
-        private const ushort VK_SHIFT = 0x10;
-        private const ushort VK_CTRL = 0x11;
-        private const ushort VK_ALT = 0x12;
+       
         private short keyboardLayoutId = 0;
         /// <summary>
         /// Convert a single char to its corresponding keycode within the currently defined keyboard layout.

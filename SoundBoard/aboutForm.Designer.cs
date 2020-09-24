@@ -100,7 +100,7 @@
             this.naudioLinkLabel.TabIndex = 3;
             this.naudioLinkLabel.TabStop = true;
             this.naudioLinkLabel.Text = "NAudio";
-            this.naudioLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.naudioLinkLabel_LinkClicked);
+            this.naudioLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.NaudioLinkLabel_LinkClicked);
             // 
             // pictureBox1
             // 

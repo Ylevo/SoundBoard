@@ -1,6 +1,6 @@
 ﻿namespace SoundBoard
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.audioHkDevicesCmbBox = new System.Windows.Forms.ComboBox();
             this.audioHkDataGrid = new System.Windows.Forms.DataGridView();
             this.audioNameCln = new System.Windows.Forms.DataGridViewTextBoxColumn();

@@ -7,8 +7,8 @@ namespace SoundBoard
 {
     public partial class optionsForm : Form
     {
-        private mainForm mainF;
-        public optionsForm(mainForm mainF)
+        private MainForm mainF;
+        public optionsForm(MainForm mainF)
         {
             this.mainF = mainF;
             InitializeComponent();
