@@ -68,7 +68,6 @@
             this.optionsMenuItem = new System.Windows.Forms.MenuItem();
             this.helpMenuItem = new System.Windows.Forms.MenuItem();
             this.aboutSubMenuItem = new System.Windows.Forms.MenuItem();
-            this.ItemTemplate = new Microsoft.VisualBasic.PowerPacks.DataRepeaterItem();
             this.mainTabCtrl = new System.Windows.Forms.TabControl();
             this.audioHkTab = new System.Windows.Forms.TabPage();
             this.audioTabGrpBox = new System.Windows.Forms.GroupBox();
@@ -499,10 +498,6 @@
             this.aboutSubMenuItem.Index = 0;
             this.aboutSubMenuItem.Text = "About";
             this.aboutSubMenuItem.Click += new System.EventHandler(this.AboutSubMenuItem_Click);
-            // 
-            // ItemTemplate
-            // 
-            this.ItemTemplate.Size = new System.Drawing.Size(232, 100);
             // 
             // mainTabCtrl
             // 
@@ -1351,7 +1346,6 @@
         private System.Windows.Forms.MenuItem helpMenuItem;
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.MenuItem exitFileSubMenuItem;
-        private Microsoft.VisualBasic.PowerPacks.DataRepeaterItem ItemTemplate;
         private System.Windows.Forms.TabControl mainTabCtrl;
         private System.Windows.Forms.TabPage controlHkFadingTab;
         private System.Windows.Forms.TabPage audioHkTab;
