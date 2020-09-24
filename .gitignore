@@ -3,3 +3,5 @@
 ################################################################################
 
 /SoundBoard/bin/Debug
+/SoundBoard/obj/x86/Debug
+/.vs/SoundBoard

@@ -145,10 +145,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Libraries\SoundTouch\SoundTouch.cs" />
-    <Compile Include="Core\Libraries\SoundTouch\SoundTouchInterop32.cs" />
-    <Compile Include="Core\Libraries\SoundTouch\SoundTouchInterop64.cs" />
-    <Compile Include="Core\Libraries\SoundTouch\SoundTouchSettings.cs" />
+    <Compile Include="Core\SoundTouch\SoundTouch.cs" />
+    <Compile Include="Core\SoundTouch\SoundTouchInterop32.cs" />
+    <Compile Include="Core\SoundTouch\SoundTouchInterop64.cs" />
+    <Compile Include="Core\SoundTouch\SoundTouchSettings.cs" />
     <Compile Include="Utilities\NativeMethods.cs" />
     <EmbeddedResource Include="aboutForm.resx">
       <DependentUpon>aboutForm.cs</DependentUpon>
@@ -189,9 +189,7 @@
     <Content Include="Resources\img\soundboard_logo_icone.ico" />
     <Content Include="soundboard_logo_icone.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\Libraries\NAudio\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>
