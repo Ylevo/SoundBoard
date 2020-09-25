@@ -16,9 +16,9 @@ namespace SoundBoard.Logic
 {
     class XmlLogic
     {
-        private KeysTranslater keysTranslater;
-        private MainForm mainFrm;
-        private HotkeyLogic hkLogic;
+        private readonly KeysTranslater keysTranslater;
+        private readonly MainForm mainFrm;
+        private readonly HotkeyLogic hkLogic;
 
         public XmlLogic(MainForm mainFrm, HotkeyLogic hkLogic)
         {
@@ -113,10 +113,9 @@ namespace SoundBoard.Logic
 
         private void LoadControlHotkeyXml(string key, XElement xmlHotkey)
         {
-            string role = xmlHotkey.Element("Role").GetValueOrEmpty(), keyToPress = "", displayedVal = "";
+            string role = xmlHotkey.Element("Role").GetValueOrEmpty(), keyToPress = "";
             float flowChangeValue = 0;
-            ControlRoles hotkeyAction;
-            if (!Enum.TryParse(role, out hotkeyAction)) { throw new HotkeyRoleInvalidException(role, key); }
+            if (!Enum.TryParse(role, out ControlRoles hotkeyAction)) { throw new HotkeyRoleInvalidException(role, key); }
             switch (hotkeyAction)
             {
                 case ControlRoles.HoldDownKey:
@@ -135,17 +134,16 @@ namespace SoundBoard.Logic
                     flowChangeValue = XmlHelper.Load.ParseFloat(xmlHotkey, "FlowChangeValue", 10);
                     break;
             }
-            int hkId = hkLogic.AddNewControlHotkey(key, hotkeyAction, out displayedVal, keyToPress, flowChangeValue);
+            int hkId = hkLogic.AddNewControlHotkey(key, hotkeyAction, out string displayedVal, keyToPress, flowChangeValue);
             mainFrm.ControlHkDataGridAddLine(key, hotkeyAction, displayedVal, hkId);
         }
 
         private void LoadFadingValuesXml(XElement fadingValues)
         {
-            FadingActions fAction;
             int fadeInValue, fadeOutValue;
             foreach (XElement fading in fadingValues.ElementsOrEmpty())
             {
-                if (!Enum.TryParse(fading.Name?.ToString(), out fAction))
+                if (!Enum.TryParse(fading.Name?.ToString(), out FadingActions fAction))
                 {
                     continue;
                 }
