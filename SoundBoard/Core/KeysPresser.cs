@@ -50,7 +50,7 @@ namespace SoundBoard.Core
         private const ushort VK_SHIFT = 0x10;
         private const ushort VK_CTRL = 0x11;
         private const ushort VK_ALT = 0x12;
-        private KeysTranslater keysTranslater = new KeysTranslater();
+        private readonly KeysTranslater keysTranslater = new KeysTranslater();
 
         /// <summary>
         /// Press once and hold down or release a key along with its modifiers. The order in which the modifiers are pressed is : alt -> shift -> ctrl. Not recommended.
@@ -95,8 +95,10 @@ namespace SoundBoard.Core
         /// <param name="flags">Specifies various aspects of the keystroke.</param>
         private Input CreateNewInput(ushort scanCode, uint flags)
         {
-            Input newInput = new Input();
-            newInput.type = INPUT_KEYBOARD;
+            Input newInput = new Input
+            {
+                type = INPUT_KEYBOARD
+            };
             newInput.ki.wScan = scanCode;
             newInput.ki.dwFlags = flags;
             newInput.ki.time = 0;

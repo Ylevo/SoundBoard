@@ -11,18 +11,17 @@ namespace SoundBoard.Logic
 {
     class HotkeyLogic
     {
-        private List<IHotkey> hotkeysList;
-        private Control mainFrm;
+        private readonly List<IHotkey> hotkeysList;
+        private readonly Control mainFrm;
         private bool inProcess = false;
-        private KeysTranslater keysTranslater;
+        private readonly KeysTranslater keysTranslater;
 
         public HotkeyLogic(Control mainFrm)
         {
             this.mainFrm = mainFrm.ThrowIfNull(nameof(mainFrm), "A form is required to attach the hotkeys to.");
             hotkeysList = new List<IHotkey>();
             keysTranslater = new KeysTranslater();
-            MasterHotkey = new ControlHotkey();
-            MasterHotkey.Role = ControlRoles.MasterHotkey;
+            MasterHotkey = new ControlHotkey { Role = ControlRoles.MasterHotkey };
             MasterHotkey.Pressed += delegate { DisableEnableHotkeys(); };
             HotkeysEnabled = true;
         }
@@ -199,8 +198,8 @@ namespace SoundBoard.Logic
             bool result;
             IHotkey hk;
             hk = hotkeysList.Find(hkey => hkey.Key.ToString() == fullKey.FullKeyString);
-            result = hk != null ? true : false;
-            result |= this.MasterHotkey.Registered ? (fullKey.FullKeyString == this.MasterHotkey.Key.FullKeyString ? true : false) : false;
+            result = hk != null;
+            result |= MasterHotkey.Registered && (fullKey.FullKeyString == MasterHotkey.Key.FullKeyString);
 
             return result;
         }

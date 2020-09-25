@@ -17,10 +17,9 @@ namespace SoundBoard.Helpers
         {
             public static Guid ParseGuid(XElement ele, XName eleNameToParse)
             {
-                Guid deviceGuid;
                 string guidString = ele.Element(eleNameToParse).GetValueOrEmpty();
                 var devices = DirectSoundOut.Devices;
-                if (!Guid.TryParse(guidString, out deviceGuid) || !devices.Select(d => d.Guid).Contains(deviceGuid))
+                if (!Guid.TryParse(guidString, out Guid deviceGuid) || !devices.Select(d => d.Guid).Contains(deviceGuid))
                 {
                     deviceGuid = devices.FirstOrDefault().Guid;
                 }
@@ -100,8 +99,7 @@ namespace SoundBoard.Helpers
         {
             return (value, numberStyle, inCulture, outCulture) =>
             {
-                T result;
-                if (tryParse(value, numberStyle, inCulture, out result))
+                if (tryParse(value, numberStyle, inCulture, out T result))
                 {
                     return result;
                 }

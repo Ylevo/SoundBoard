@@ -26,7 +26,7 @@ namespace SoundBoard.Core
         private SoundTouch soundTouch = null, fadingOutSoundTouch = null;
         private float currentTempo = 1.0f, currentPitch = 0.0f, currentSpeed = 1.0f, currentVolume = 1.0f;
         private bool muted = false, autoRepeat = false;
-        private Dictionary<FadingActions, Dictionary<string, int>> fadingValues = new Dictionary<FadingActions, Dictionary<string, int>>()
+        private readonly Dictionary<FadingActions, Dictionary<string, int>> fadingValues = new Dictionary<FadingActions, Dictionary<string, int>>()
         {
             { FadingActions.StartSound, new Dictionary<string, int>() { {"fadeIn", 0 }, { "fadeOut", 0 } } },
             { FadingActions.Stop, new Dictionary<string, int>() { {"fadeIn", 0 }, { "fadeOut", 0 } } },
@@ -39,7 +39,7 @@ namespace SoundBoard.Core
         private TracksOrders tracksPlayOrder = TracksOrders.Default;
         private string[] tracksOrdered = null;
         private int nextTrack;
-        private NotifyIcon notificator = new NotifyIcon();
+        private readonly NotifyIcon notificator = new NotifyIcon();
 
         static SoundPlayer() { }
 
@@ -195,9 +195,11 @@ namespace SoundBoard.Core
             }
             if (playbackState == CustomPlayBackState.Playing)
             {
-                fadingOutAudioFileReader = new AudioFileReader(currentTrackPlayed);
-                fadingOutAudioFileReader.Volume = audioFileReader.Volume;
-                fadingOutAudioFileReader.Position = audioFileReader.Position;
+                fadingOutAudioFileReader = new AudioFileReader(currentTrackPlayed)
+                {
+                    Volume = audioFileReader.Volume,
+                    Position = audioFileReader.Position
+                };
                 fadingOutSoundTouch = new SoundTouch();
                 SetSoundTouchSettings(fadingOutSoundTouch, fadingOutAudioFileReader, true);
                 fadingOutSampleProvider = new CustomSampleProvider(fadingOutAudioFileReader, fadingOutSoundTouch);

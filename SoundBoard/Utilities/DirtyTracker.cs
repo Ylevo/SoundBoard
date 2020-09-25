@@ -19,17 +19,17 @@ namespace SoundBoard.Utilities
             audioHotkeysDataGridCleanValues = new string[audioHotkeysDataGrid.Rows.Count];
             for (i = 0; i < audioHotkeysDataGrid.Rows.Count; ++i)
             {
-                audioHotkeysDataGridCleanValues[i] = getStringValueOfDataGridRow(audioHotkeysDataGrid.Rows[i]);
+                audioHotkeysDataGridCleanValues[i] = GetStringValueOfDataGridRow(audioHotkeysDataGrid.Rows[i]);
             }
             ctrlHotkeysDataGridCleanValues = new string[ctrlHotkeysDataGrid.Rows.Count];
             for (i = 0; i < ctrlHotkeysDataGrid.Rows.Count; ++i)
             {
-                ctrlHotkeysDataGridCleanValues[i] = getStringValueOfDataGridRow(ctrlHotkeysDataGrid.Rows[i]);
+                ctrlHotkeysDataGridCleanValues[i] = GetStringValueOfDataGridRow(ctrlHotkeysDataGrid.Rows[i]);
             }
             fadingValuesDataGridCleanValues = new string[fadingValuesDataGrid.Rows.Count];
             for (i = 0; i < fadingValuesDataGrid.Rows.Count; ++i)
             {
-                fadingValuesDataGridCleanValues[i] = getStringValueOfDataGridRow(fadingValuesDataGrid.Rows[i]);
+                fadingValuesDataGridCleanValues[i] = GetStringValueOfDataGridRow(fadingValuesDataGrid.Rows[i]);
             }
             this.audioHotkeysDataGrid = audioHotkeysDataGrid;
             this.ctrlHotkeysDataGrid = ctrlHotkeysDataGrid;
@@ -42,7 +42,7 @@ namespace SoundBoard.Utilities
             };
         }
 
-        private string getStringValueOfDataGridRow(DataGridViewRow row)
+        private string GetStringValueOfDataGridRow(DataGridViewRow row)
         {
             string rowValue = "";
             int i;
@@ -53,7 +53,7 @@ namespace SoundBoard.Utilities
             return rowValue;
         }
 
-        public bool isFormDirty()
+        public bool IsFormDirty()
         {
             bool dirty = false;
             int i = 0;
@@ -70,7 +70,7 @@ namespace SoundBoard.Utilities
                     dataGridCurrentValues = new string[dataGrid.Rows.Count];
                     for (i = 0; i < dataGrid.Rows.Count; ++i)
                     {
-                        dataGridCurrentValues[i] = getStringValueOfDataGridRow(dataGrid.Rows[i]);
+                        dataGridCurrentValues[i] = GetStringValueOfDataGridRow(dataGrid.Rows[i]);
                     }
                     if (!new HashSet<string>(dataGridCurrentValues).SetEquals(gridsAndValuesToCompare[dataGrid]))
                     {

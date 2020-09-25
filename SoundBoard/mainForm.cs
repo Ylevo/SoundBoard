@@ -338,7 +338,7 @@ namespace SoundBoard
         private DialogResult AskForSaving()
         {
             DialogResult answer = DialogResult.None;
-            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.isFormDirty())
+            if (AppDataManager.getCfgParameter(AppDataNames.DisableDirtyTracker) == "0" && dirtyTracker.IsFormDirty())
             {
                 answer = MessageBox.Show("Save hotkeys?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             }
