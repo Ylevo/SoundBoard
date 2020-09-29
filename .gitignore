@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/SoundBoard/bin/Debug
+/SoundBoard/obj/x86/Debug
+/.vs/SoundBoard
