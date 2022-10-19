@@ -12,4 +12,4 @@ Features :
 - Multiple files on the same hotkey with an option for the playing order (shuffle/random/default).
 - Audio output setting (best used with Virtual Audio Cable or the likes of).
 
-Only supports .mp3 and .wav unfortunately.
+Only supports .mp3 and .wav.
