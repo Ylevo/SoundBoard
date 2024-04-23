@@ -208,7 +208,7 @@ namespace SoundBoard.Core
 
         public bool IsPressedEventNull()
         {
-            return Pressed == null ? true : false;
+            return Pressed == null;
         }
         
         public void AssignKey(Keys keycode, bool shift, bool ctrl, bool alt)
